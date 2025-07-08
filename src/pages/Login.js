@@ -8,10 +8,11 @@ const Login = () => {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Temporary fake login logic
+
     if (email && password) {
+      // Temporary fake login logic
       alert('Login successful!');
-      navigate('/'); // redirect to home
+      navigate('/home'); // 👈 Redirect to Home after login
     } else {
       alert('Please fill all fields');
     }
@@ -23,13 +24,23 @@ const Login = () => {
       <form onSubmit={handleLogin}>
         <div className="mb-3">
           <label>Email:</label>
-          <input type="email" className="form-control" value={email}
-            onChange={(e) => setEmail(e.target.value)} required />
+          <input
+            type="email"
+            className="form-control"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
         </div>
         <div className="mb-3">
           <label>Password:</label>
-          <input type="password" className="form-control" value={password}
-            onChange={(e) => setPassword(e.target.value)} required />
+          <input
+            type="password"
+            className="form-control"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
         </div>
         <button type="submit" className="btn btn-primary w-100">Login</button>
       </form>
