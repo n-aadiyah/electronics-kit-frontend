@@ -7,6 +7,15 @@ import Products from "./pages/Products";
 import Cart from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import Checkout from "./pages/Checkout";
+import Login from './pages/Login';
+import Register from './pages/Register';
+
+<Routes>
+  {/* other routes */}
+  <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
+</Routes>
+
 
 const App = () => {
   return (
@@ -18,6 +27,8 @@ const App = () => {
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="*" element={<h2>Page not found</h2>} />
+         <Route path="/login" element={<Login />} />
+  <Route path="/register" element={<Register />} />
       </Routes>
     </main>
   );
