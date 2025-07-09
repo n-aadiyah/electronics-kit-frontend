@@ -10,13 +10,18 @@ const Cart = () => {
   };
 
   const total = cartItems.reduce((acc, item) => {
-    const price = parseInt(item.price.replace("₹", "").replace(",", ""));
-    return acc + price;
+    const rawPrice = item?.price || "₹0";
+    const price = parseInt(rawPrice.replace(/[₹,]/g, ""));
+    return acc + (isNaN(price) ? 0 : price);
   }, 0);
 
   return (
     <div>
       <h2 className="mb-4">Your Cart</h2>
+
+      {/* 🧪 Debug output */}
+      <pre>{JSON.stringify(cartItems, null, 2)}</pre>
+
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (

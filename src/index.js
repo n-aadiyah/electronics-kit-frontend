@@ -1,13 +1,12 @@
-// src/index.js
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
-import { CartProvider } from './context/CartContext';
+import { CartProvider } from './context/CartContext'; // ✅
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <CartProvider>
+    <CartProvider>  {/* ✅ Global wrapper */}
       <App />
     </CartProvider>
   </React.StrictMode>

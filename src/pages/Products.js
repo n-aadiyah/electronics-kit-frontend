@@ -1,5 +1,5 @@
-// src/pages/Products.js
-import React from "react";
+import React, { useContext } from "react";
+import { CartContext } from "../context/CartContext";
 import ProductCard from "../components/ProductCard";
 
 const products = [
@@ -24,12 +24,15 @@ const products = [
 ];
 
 const Products = () => {
+  const { addToCart } = useContext(CartContext);
+
   return (
     <div>
       <h2 className="mb-4">Available Kits</h2>
+
       <div className="row">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
         ))}
       </div>
     </div>

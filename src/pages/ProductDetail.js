@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
-// Dummy product list (you can move this to a separate file if needed)
+// Dummy product list
 const products = [
   {
     id: 1,
@@ -28,22 +28,33 @@ const products = [
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToCart } = useContext(CartContext);
+  const { cartItems, addToCart } = useContext(CartContext);
 
   const product = products.find((p) => p.id === parseInt(id));
+  const alreadyInCart = cartItems.some((item) => item.id === product?.id);
 
   if (!product) {
     return <h4>Product not found</h4>;
   }
+
+  const handleAdd = () => {
+    addToCart(product);
+  };
 
   return (
     <div className="container">
       <h2 className="my-4">{product.name}</h2>
       <p>{product.description}</p>
       <h4 className="text-success">{product.price}</h4>
-      <button className="btn btn-primary me-3" onClick={() => addToCart(product)}>
-        Add to Cart
+
+      <button
+        className="btn btn-primary me-3"
+        onClick={handleAdd}
+        disabled={alreadyInCart}
+      >
+        {alreadyInCart ? "Added to Cart" : "Add to Cart"}
       </button>
+
       <button className="btn btn-outline-secondary" onClick={() => navigate(-1)}>
         Go Back
       </button>
