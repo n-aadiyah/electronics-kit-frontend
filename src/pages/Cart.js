@@ -1,14 +1,12 @@
-// src/pages/Cart.js
 import React, { useContext } from "react";
 import { CartContext } from "../context/CartContext";
-import { Link } from "react-router-dom"; // ✅ Import Link
+import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems, setCartItems } = useContext(CartContext);
+  const { cartItems, removeFromCart } = useContext(CartContext);
 
   const handleRemove = (id) => {
-    const updatedCart = cartItems.filter((item) => item.id !== id);
-    setCartItems(updatedCart);
+    removeFromCart(id);
   };
 
   const total = cartItems.reduce((acc, item) => {
@@ -39,7 +37,6 @@ const Cart = () => {
 
           <h4 className="text-end">Total: ₹{total.toLocaleString()}</h4>
 
-          {/* ✅ Proceed to Checkout Button */}
           <div className="text-end mt-3">
             <Link to="/checkout" className="btn btn-success">
               Proceed to Checkout
