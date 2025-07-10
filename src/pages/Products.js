@@ -1,40 +1,45 @@
-import React, { useContext } from "react";
-import { CartContext } from "../context/CartContext";
+import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
 import ProductCard from "../components/ProductCard";
-
-const products = [
-  {
-    id: 1,
-    name: "Arduino Starter Kit",
-    price: "₹999",
-    description: "Beginner-friendly kit with Arduino UNO, jumper wires, LEDs, and sensors.",
-  },
-  {
-    id: 2,
-    name: "Raspberry Pi Kit",
-    price: "₹3,499",
-    description: "Complete Raspberry Pi 4 kit for IoT and programming projects.",
-  },
-  {
-    id: 3,
-    name: "Robotics Kit",
-    price: "₹1,799",
-    description: "Build your own robot car with this motor driver and sensor kit.",
-  },
-];
+import { CartContext } from "../context/CartContext";
 
 const Products = () => {
+  const [products, setProducts] = useState([]);
   const { addToCart } = useContext(CartContext);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/products")
+      .then((res) => {
+        setProducts(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Failed to load products:", err);
+        setError("Failed to load products.");
+        setLoading(false);
+      });
+  }, []);
 
   return (
-    <div>
-      <h2 className="mb-4">Available Kits</h2>
+    <div className="container my-5">
+      <h2 className="mb-4 text-center">Available Kits</h2>
 
-      <div className="row">
-        {products.map((product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={addToCart} />
-        ))}
-      </div>
+      {loading ? (
+        <div className="text-center">Loading...</div>
+      ) : error ? (
+        <div className="text-center text-danger">{error}</div>
+      ) : (
+        <div className="row">
+          {products.map((product) => (
+            <div className="col-12 col-sm-6 col-md-4 mb-4" key={product._id}>
+              <ProductCard product={product} onAddToCart={addToCart} />
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };
