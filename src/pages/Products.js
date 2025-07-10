@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom"; // 👈 Add this
 import ProductCard from "../components/ProductCard";
 import { CartContext } from "../context/CartContext";
 
@@ -25,6 +26,13 @@ const Products = () => {
 
   return (
     <div className="container my-5">
+      {/* Back Button */}
+      <div className="mb-4">
+        <Link to="/" className="btn btn-outline-primary">
+          ⬅ Back to Home
+        </Link>
+      </div>
+
       <h2 className="mb-4 text-center">Available Kits</h2>
 
       {loading ? (
