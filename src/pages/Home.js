@@ -1,10 +1,21 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import ProductCard from "../components/ProductCard";
 
 const Home = () => {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/products", { withCredentials: true })
+      .then((res) => setProducts(res.data))
+      .catch((err) => console.error("Error fetching products:", err));
+  }, []);
+
   return (
     <div>
-      {/* Hero Section with Background Image */}
+      {/* Hero Section */}
       <section
         className="text-white text-center d-flex align-items-center"
         style={{
@@ -40,6 +51,23 @@ const Home = () => {
             <h4 className="mb-3">Fast Delivery</h4>
             <p>Get your kits delivered anywhere in India within 3–5 days.</p>
           </div>
+        </div>
+      </section>
+
+      {/* Featured Products Section */}
+      <section className="container my-5">
+        <h3 className="text-center mb-4">Featured Kits</h3>
+        <div className="row">
+          {products.slice(0, 6).map((product) => (
+            <div key={product._id} className="col-md-4 mb-4">
+              <ProductCard product={product} />
+            </div>
+          ))}
+        </div>
+        <div className="text-center">
+          <Link to="/products" className="btn btn-outline-primary mt-3">
+            View All Kits
+          </Link>
         </div>
       </section>
 
