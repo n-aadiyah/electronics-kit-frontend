@@ -1,41 +1,36 @@
 // src/pages/ProductDetail.js
-import React, { useContext } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
-
-// Dummy product list
-const products = [
-  {
-    id: 1,
-    name: "Arduino Starter Kit",
-    price: "₹999",
-    description: "Beginner-friendly kit with Arduino UNO, jumper wires, LEDs, and sensors.",
-  },
-  {
-    id: 2,
-    name: "Raspberry Pi Kit",
-    price: "₹3,499",
-    description: "Complete Raspberry Pi 4 kit for IoT and programming projects.",
-  },
-  {
-    id: 3,
-    name: "Robotics Kit",
-    price: "₹1,799",
-    description: "Build your own robot car with this motor driver and sensor kit.",
-  },
-];
 
 const ProductDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { cartItems, addToCart } = useContext(CartContext);
+  
+  const [product, setProduct] = useState(null);
+  const [error, setError] = useState(false);
 
-  const product = products.find((p) => p.id === parseInt(id));
-  const alreadyInCart = cartItems.some((item) => item.id === product?.id);
+  useEffect(() => {
+    fetch(`http://localhost:5000/api/products/${id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.error) {
+          setError(true);
+        } else {
+          setProduct(data);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to fetch product:", err);
+        setError(true);
+      });
+  }, [id]);
 
-  if (!product) {
-    return <h4>Product not found</h4>;
-  }
+  const alreadyInCart = cartItems.some((item) => item._id === product?._id);
+
+  if (error) return <h4>Product not found</h4>;
+  if (!product) return <p>Loading...</p>;
 
   const handleAdd = () => {
     addToCart(product);
@@ -45,7 +40,7 @@ const ProductDetail = () => {
     <div className="container">
       <h2 className="my-4">{product.name}</h2>
       <p>{product.description}</p>
-      <h4 className="text-success">{product.price}</h4>
+      <h4 className="text-success">₹{product.price}</h4>
 
       <button
         className="btn btn-primary me-3"

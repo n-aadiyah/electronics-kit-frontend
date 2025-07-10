@@ -29,7 +29,7 @@ const ProductCard = ({ product }) => {
               {alreadyInCart ? "Added to Cart" : "Add to Cart"}
             </button>
             <Link
-              to={`/products/${product.id}`}
+              to={`/products/${product._id}`}
               className="btn btn-outline-secondary"
             >
               View Details
