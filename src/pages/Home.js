@@ -5,12 +5,21 @@ import ProductCard from "../components/ProductCard";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/products", { withCredentials: true })
-      .then((res) => setProducts(res.data))
-      .catch((err) => console.error("Error fetching products:", err));
+      .then((res) => {
+        setProducts(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError("Failed to load products.");
+        console.error("Error fetching products:", err);
+        setLoading(false);
+      });
   }, []);
 
   return (
@@ -57,13 +66,21 @@ const Home = () => {
       {/* Featured Products Section */}
       <section className="container my-5">
         <h3 className="text-center mb-4">Featured Kits</h3>
-        <div className="row">
-          {products.slice(0, 6).map((product) => (
-            <div key={product._id} className="col-md-4 mb-4">
-              <ProductCard product={product} />
-            </div>
-          ))}
-        </div>
+
+        {loading ? (
+          <div className="text-center">Loading products...</div>
+        ) : error ? (
+          <div className="text-center text-danger">{error}</div>
+        ) : (
+          <div className="row">
+            {products.slice(0, 6).map((product) => (
+              <div key={product._id} className="col-md-4 mb-4">
+                <ProductCard product={product} />
+              </div>
+            ))}
+          </div>
+        )}
+
         <div className="text-center">
           <Link to="/products" className="btn btn-outline-primary mt-3">
             View All Kits
