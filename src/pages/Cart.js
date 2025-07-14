@@ -50,7 +50,10 @@ const Cart = () => {
 
           <h4 className="text-end">Total: ₹{total.toLocaleString()}</h4>
 
-          <div className="text-end mt-3">
+          <div className="d-flex justify-content-end gap-2 mt-3">
+            <Link to="/products" className="btn btn-outline-secondary">
+              Cancel
+            </Link>
             <Link to="/checkout" className="btn btn-success">
               Proceed to Checkout
             </Link>
@@ -60,5 +63,6 @@ const Cart = () => {
     </div>
   );
 };
+
 
 export default Cart;
