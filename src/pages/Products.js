@@ -28,7 +28,7 @@ const Products = () => {
     <div className="container my-5">
       {/* Back Button */}
       <div className="mb-4">
-        <Link to="/" className="btn btn-outline-primary">
+        <Link to="/home" className="btn btn-outline-primary">
           ⬅ Back to Home
         </Link>
       </div>

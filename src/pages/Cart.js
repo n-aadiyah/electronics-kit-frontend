@@ -3,10 +3,17 @@ import { CartContext } from "../context/CartContext";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
-  const { cartItems, removeFromCart } = useContext(CartContext);
+  const { cartItems, removeFromCart, isCartReady } = useContext(CartContext);
 
-  const handleRemove = (id) => {
-    removeFromCart(id);
+  // ✅ Prevent early render before cart is loaded from localStorage
+  if (!isCartReady) {
+    return <div className="text-center mt-5">Loading your cart...</div>;
+  }
+
+  console.log("🧺 Cart Items from context:", cartItems);
+
+  const handleRemove = (_id) => {
+    removeFromCart(_id);
   };
 
   const total = cartItems.reduce((acc, item) => {
@@ -33,7 +40,10 @@ const Cart = () => {
                   <h5>{item.name}</h5>
                   <p className="mb-0 text-success">{item.price}</p>
                 </div>
-                <button className="btn btn-danger" onClick={() => handleRemove(item.id)}>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handleRemove(item._id)} // ✅ using _id
+                >
                   Remove
                 </button>
               </div>

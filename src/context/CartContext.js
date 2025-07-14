@@ -1,41 +1,44 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// ✅ Create the context
 export const CartContext = createContext();
 
-// ✅ Provider component
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([]);
+  const [isCartReady, setIsCartReady] = useState(false); // ✅
 
-  // ✅ Load cart items from localStorage on first render
+  // Load from localStorage on mount
   useEffect(() => {
-    const storedCart = localStorage.getItem("cartItems");
-    if (storedCart) {
-      setCartItems(JSON.parse(storedCart));
+    const stored = localStorage.getItem("cartItems");
+    if (stored) {
+      try {
+        setCartItems(JSON.parse(stored));
+        console.log("📦 Cart loaded:", JSON.parse(stored));
+      } catch (err) {
+        console.error("❌ JSON error", err);
+      }
     }
+    setIsCartReady(true); // ✅ Mark done
   }, []);
 
-  // ✅ Save cart items to localStorage whenever they change
   useEffect(() => {
-    localStorage.setItem("cartItems", JSON.stringify(cartItems));
-  }, [cartItems]);
+    if (isCartReady) {
+      localStorage.setItem("cartItems", JSON.stringify(cartItems));
+    }
+  }, [cartItems, isCartReady]);
 
-  // ✅ Add to cart (prevent duplicates)
   const addToCart = (product) => {
-    console.log("🛒 addToCart called:", product);
-    const alreadyInCart = cartItems.find((item) => item.id === product.id);
+    const alreadyInCart = cartItems.some((item) => item._id === product._id);
     if (!alreadyInCart) {
-      setCartItems((prevItems) => [...prevItems, product]);
+      setCartItems((prev) => [...prev, product]);
     }
   };
 
-  // ✅ Remove from cart
-  const removeFromCart = (id) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== id));
+  const removeFromCart = (_id) => {
+    setCartItems((prev) => prev.filter((item) => item._id !== _id));
   };
 
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart }}>
+    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, isCartReady }}>
       {children}
     </CartContext.Provider>
   );

@@ -1,10 +1,11 @@
-// src/components/ProductCard.js
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
 
 const ProductCard = ({ product }) => {
   const { cartItems, addToCart } = useContext(CartContext);
+
+  // ✅ Check if the product is already in the cart using _id
   const alreadyInCart = cartItems.some((item) => item._id === product._id);
 
   const handleAdd = () => {
@@ -13,7 +14,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="card h-100 shadow-sm">
-      {/* Optional image */}
+      {/* Optional product image */}
       {product.image && (
         <img
           src={product.image}
