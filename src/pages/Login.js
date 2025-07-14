@@ -20,11 +20,11 @@ const Login = () => {
       await axios.post(
         'http://localhost:5000/api/auth/login',
         { email, password },
-        { withCredentials: true } // needed for cookie-based sessions
+        { withCredentials: true }
       );
 
       alert('✅ Login successful!');
-      navigate('/home'); // or your home/dashboard route
+      navigate('/home');
     } catch (err) {
       console.error('Login error:', err);
       if (err.response?.data?.error) {
@@ -36,8 +36,29 @@ const Login = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '80vh' }}>
-      <div className="card shadow-sm p-4" style={{ width: '100%', maxWidth: '400px' }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+         minHeight: '90vh', // or even 'auto'
+    width: '100%',     // no 100vw
+        backgroundImage: "url('https://i.pinimg.com/736x/f1/16/3e/f1163e512cc4add300957056066d00c2.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        margin: 0,
+        padding: 0,
+        overflow: 'hidden', 
+      }}
+    >
+      <div
+        className="card shadow-sm p-4"
+        style={{
+          width: '100%',
+          maxWidth: '400px',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: '10px',
+        }}
+      >
         <h3 className="text-center mb-3">Login</h3>
 
         {error && <div className="alert alert-danger">{error}</div>}

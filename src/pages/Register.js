@@ -44,8 +44,28 @@ const Register = () => {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: '90vh' }}>
-      <div className="card shadow-sm p-4 w-100" style={{ maxWidth: '400px' }}>
+    <div
+      className="d-flex justify-content-center align-items-center"
+      style={{
+        minHeight: '90vh', // or even 'auto'
+    width: '100%',     // no 100vw
+        backgroundImage: "url('https://i.pinimg.com/736x/f1/16/3e/f1163e512cc4add300957056066d00c2.jpg')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundRepeat: 'no-repeat',
+        margin: 0,
+        padding: 0,
+        overflow: 'hidden', 
+      }}
+    >
+      <div
+        className="card shadow-sm p-4 w-100"
+        style={{
+          maxWidth: '400px',
+          backgroundColor: 'rgba(255, 255, 255, 0.9)',
+          borderRadius: '10px',
+        }}
+      >
         <h3 className="text-center mb-3">Register</h3>
 
         {error && <div className="alert alert-danger">{error}</div>}
