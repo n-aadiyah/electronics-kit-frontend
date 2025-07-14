@@ -5,12 +5,13 @@ import { Link } from "react-router-dom";
 const Cart = () => {
   const { cartItems, removeFromCart, isCartReady } = useContext(CartContext);
 
-  // ✅ Prevent early render before cart is loaded from localStorage
   if (!isCartReady) {
-    return <div className="text-center mt-5">Loading your cart...</div>;
+    return <div className="text-center mt-5">⏳ Loading your cart...</div>;
   }
 
-  console.log("🧺 Cart Items from context:", cartItems);
+  if (!Array.isArray(cartItems)) {
+    return <div className="text-center mt-5 text-danger">❌ Cart data is invalid</div>;
+  }
 
   const handleRemove = (_id) => {
     removeFromCart(_id);
@@ -18,21 +19,18 @@ const Cart = () => {
 
   const total = cartItems.reduce((acc, item) => {
     const rawPrice = item?.price || "₹0";
-    const price = parseInt(rawPrice.replace(/[₹,]/g, ""));
+    const price = parseInt(rawPrice.toString().replace(/[₹,]/g, ""));
     return acc + (isNaN(price) ? 0 : price);
   }, 0);
 
   return (
-    <div>
-      <h2 className="mb-4">Your Cart</h2>
-
-      {/* 🧪 Debug output */}
-      <pre>{JSON.stringify(cartItems, null, 2)}</pre>
+    <div className="container my-5">
+      <h2 className="mb-4">🛒 Your Cart</h2>
 
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
-        <div>
+        <>
           {cartItems.map((item, index) => (
             <div key={index} className="card mb-3">
               <div className="card-body d-flex justify-content-between align-items-center">
@@ -42,7 +40,7 @@ const Cart = () => {
                 </div>
                 <button
                   className="btn btn-danger"
-                  onClick={() => handleRemove(item._id)} // ✅ using _id
+                  onClick={() => handleRemove(item._id)}
                 >
                   Remove
                 </button>
@@ -57,7 +55,7 @@ const Cart = () => {
               Proceed to Checkout
             </Link>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
