@@ -69,22 +69,32 @@ const ProductDetail = () => {
             <h4 className="text-success mb-4">₹{product.price}</h4>
 
             {/* ✅ Buttons */}
-            <div className="d-flex justify-content-center gap-3">
-              <button
-                className="btn btn-primary"
-                onClick={handleAdd}
-                disabled={alreadyInCart}
-              >
-                {alreadyInCart ? "✔ Added to Cart" : "🛒 Add to Cart"}
-              </button>
+<div className="d-flex flex-column align-items-center gap-2 mt-3">
+  <div className="d-flex gap-3">
+    <button
+      className="btn btn-primary"
+      onClick={handleAdd}
+      disabled={alreadyInCart}
+    >
+      {alreadyInCart ? "✔ Added to Cart" : "🛒 Add to Cart"}
+    </button>
 
-              <button
-                className="btn btn-outline-secondary"
-                onClick={() => navigate(-1)}
-              >
-                🔙 Go Back
-              </button>
-            </div>
+    <button
+      className="btn btn-outline-secondary"
+      onClick={() => navigate(-1)}
+    >
+      🔙 Go Back
+    </button>
+  </div>
+
+  <button
+    className="btn btn-outline-success"
+    onClick={() => navigate("/cart")}
+  >
+    🛒 Go to Cart
+  </button>
+</div>
+
           </div>
         </div>
       </div>
