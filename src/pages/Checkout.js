@@ -1,7 +1,11 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { CartContext } from "../context/CartContext";
 
 const Checkout = () => {
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -11,22 +15,43 @@ const Checkout = () => {
     phone: "",
   });
 
+  const { cartItems, getTotalAmount, clearCart } = useContext(CartContext);
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("✅ Order placed successfully!\nThank you for your purchase.");
-    setFormData({
-      name: "",
-      email: "",
-      address: "",
-      city: "",
-      postalCode: "",
-      phone: "",
-    });
+
+    const token = localStorage.getItem("token");
+
+    try {
+      await axios.post(
+        "http://localhost:5000/api/orders",
+        {
+          items: cartItems.map((item) => ({
+            productId: item._id,
+            quantity: item.quantity || 1,
+          })),
+          totalAmount: getTotalAmount(),
+          shippingInfo: formData,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("✅ Order placed successfully!");
+      clearCart();
+      navigate("/"); // Redirect to home or orders page
+    } catch (err) {
+      console.error("Order Error:", err);
+      alert("❌ Failed to place order. Try again.");
+    }
   };
 
   return (
@@ -105,11 +130,7 @@ const Checkout = () => {
           />
         </div>
 
-        {/* ✅ Buttons Row */}
         <div className="col-12 d-flex justify-content-end gap-2 mt-2">
-          <Link to="/cart" className="btn btn-outline-secondary">
-            Cancel
-          </Link>
           <button type="submit" className="btn btn-success">
             Place Order
           </button>

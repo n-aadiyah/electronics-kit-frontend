@@ -17,11 +17,13 @@ const Login = () => {
     }
 
     try {
-      await axios.post(
+      const res = await axios.post(
         'http://localhost:5000/api/auth/login',
-        { email, password },
-        { withCredentials: true }
+        { email, password }
       );
+
+      // ✅ Save token in localStorage
+      localStorage.setItem("token", res.data.token);
 
       alert('✅ Login successful!');
       navigate('/home');
@@ -39,15 +41,15 @@ const Login = () => {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-         minHeight: '90vh', // or even 'auto'
-    width: '100%',     // no 100vw
+        minHeight: '90vh',
+        width: '100%',
         backgroundImage: "url('https://i.pinimg.com/736x/f1/16/3e/f1163e512cc4add300957056066d00c2.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         margin: 0,
         padding: 0,
-        overflow: 'hidden', 
+        overflow: 'hidden',
       }}
     >
       <div
