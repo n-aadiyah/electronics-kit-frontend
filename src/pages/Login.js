@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../config'; // ✅ Import the base URL
 
 const Login = () => {
   const [email, setEmail]       = useState('');
@@ -18,8 +19,9 @@ const Login = () => {
 
     try {
       const res = await axios.post(
-        'http://localhost:5000/api/auth/login',
-        { email, password }
+        `${API_BASE_URL}/api/auth/login`, // ✅ Use deployed backend
+        { email, password },
+        { withCredentials: true }         // ✅ Optional: needed if backend sends cookies
       );
 
       // ✅ Save token in localStorage

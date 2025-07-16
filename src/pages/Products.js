@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom"; // 👈 Add this
+import { Link } from "react-router-dom";
 import ProductCard from "../components/ProductCard";
 import { CartContext } from "../context/CartContext";
+import { API_BASE_URL } from "../config"; // ✅ added
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -12,7 +13,7 @@ const Products = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products")
+      .get(`${API_BASE_URL}/api/products`) // ✅ deployed URL
       .then((res) => {
         setProducts(res.data);
         setLoading(false);

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import ProductCard from "../components/ProductCard";
+import { API_BASE_URL } from "../config"; // ✅ Import the API base URL
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -10,7 +11,7 @@ const Home = () => {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/products", { withCredentials: true })
+      .get(`${API_BASE_URL}/api/products`, { withCredentials: true }) // ✅ Updated URL
       .then((res) => {
         setProducts(res.data);
         setLoading(false);

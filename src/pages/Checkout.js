@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { CartContext } from "../context/CartContext";
+import { API_BASE_URL } from "../config"; // ✅ import API base
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -24,12 +25,11 @@ const Checkout = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const token = localStorage.getItem("token");
 
     try {
       await axios.post(
-        "http://localhost:5000/api/orders",
+        `${API_BASE_URL}/api/orders`, // ✅ use deployed URL
         {
           items: cartItems.map((item) => ({
             productId: item._id,
@@ -47,7 +47,7 @@ const Checkout = () => {
 
       alert("✅ Order placed successfully!");
       clearCart();
-      navigate("/"); // Redirect to home or orders page
+      navigate("/"); // redirect after order
     } catch (err) {
       console.error("Order Error:", err);
       alert("❌ Failed to place order. Try again.");

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { API_BASE_URL } from '../config'; // ✅ imported
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -8,7 +9,6 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm]   = useState('');
   const [error, setError]       = useState('');
-
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
@@ -26,7 +26,7 @@ const Register = () => {
 
     try {
       await axios.post(
-        'http://localhost:5000/api/auth/register',
+        `${API_BASE_URL}/api/auth/register`, // ✅ deployed API
         { username, email, password },
         { withCredentials: true }
       );
@@ -47,15 +47,15 @@ const Register = () => {
     <div
       className="d-flex justify-content-center align-items-center"
       style={{
-        minHeight: '90vh', // or even 'auto'
-    width: '100%',     // no 100vw
+        minHeight: '90vh',
+        width: '100%',
         backgroundImage: "url('https://i.pinimg.com/736x/f1/16/3e/f1163e512cc4add300957056066d00c2.jpg')",
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
         margin: 0,
         padding: 0,
-        overflow: 'hidden', 
+        overflow: 'hidden',
       }}
     >
       <div

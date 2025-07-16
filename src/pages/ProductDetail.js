@@ -2,6 +2,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import { API_BASE_URL } from "../config"; // ✅ imported
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -11,7 +12,6 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [error, setError] = useState(false);
 
-  // ✅ Default images per category
   const defaultImages = {
     Electronics: "https://upload.wikimedia.org/wikipedia/commons/3/38/Arduino_Uno_-_R3.jpg",
     Books: "https://cdn-icons-png.flaticon.com/512/29/29302.png",
@@ -19,7 +19,7 @@ const ProductDetail = () => {
   };
 
   useEffect(() => {
-    fetch(`http://localhost:5000/api/products/${id}`)
+    fetch(`${API_BASE_URL}/api/products/${id}`)
       .then((res) => res.json())
       .then((data) => {
         if (data.error) {
@@ -43,7 +43,6 @@ const ProductDetail = () => {
     addToCart(product);
   };
 
-  // ✅ Supports public folder images + external URLs + category fallback
   const productImage = product.image?.startsWith("http")
     ? product.image
     : product.image
@@ -55,45 +54,41 @@ const ProductDetail = () => {
       <div className="row justify-content-center">
         <div className="col-md-8">
           <div className="card p-4 shadow text-center">
-            {/* ✅ Product Image */}
             <img
               src={productImage}
               alt={product.name}
               className="img-fluid mb-4"
               style={{ maxHeight: "250px", objectFit: "contain" }}
             />
-
-            {/* ✅ Product Info */}
             <h2 className="mb-2">{product.name}</h2>
             <p>{product.description}</p>
             <h4 className="text-success mb-4">₹{product.price}</h4>
 
-            {/* ✅ Buttons */}
-<div className="d-flex flex-column align-items-center gap-2 mt-3">
-  <div className="d-flex gap-3">
-    <button
-      className="btn btn-primary"
-      onClick={handleAdd}
-      disabled={alreadyInCart}
-    >
-      {alreadyInCart ? "✔ Added to Cart" : "🛒 Add to Cart"}
-    </button>
+            <div className="d-flex flex-column align-items-center gap-2 mt-3">
+              <div className="d-flex gap-3">
+                <button
+                  className="btn btn-primary"
+                  onClick={handleAdd}
+                  disabled={alreadyInCart}
+                >
+                  {alreadyInCart ? "✔ Added to Cart" : "🛒 Add to Cart"}
+                </button>
 
-    <button
-      className="btn btn-outline-secondary"
-      onClick={() => navigate(-1)}
-    >
-      🔙 Go Back
-    </button>
-  </div>
+                <button
+                  className="btn btn-outline-secondary"
+                  onClick={() => navigate(-1)}
+                >
+                  🔙 Go Back
+                </button>
+              </div>
 
-  <button
-    className="btn btn-outline-success"
-    onClick={() => navigate("/cart")}
-  >
-    🛒 Go to Cart
-  </button>
-</div>
+              <button
+                className="btn btn-outline-success"
+                onClick={() => navigate("/cart")}
+              >
+                🛒 Go to Cart
+              </button>
+            </div>
 
           </div>
         </div>
