@@ -13,6 +13,7 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    console.log("🔥 handleRegister called"); // ✅ Debug log
 
     if (!username || !email || !password || !confirm) {
       setError('❌ Please fill in all fields.');
@@ -26,15 +27,14 @@ const Register = () => {
 
     try {
       await axios.post(
-        `${API_BASE_URL}/api/auth/register`, // ✅ deployed API
-        { username, email, password },
-        { withCredentials: true }
+        `${API_BASE_URL}/api/auth/register`,
+        { username, email, password }
       );
 
       alert('✅ Registered successfully!');
       navigate('/login');
     } catch (err) {
-      console.error('Registration error:', err);
+      console.error('❌ Registration error:', err);
       if (err.response?.data?.error) {
         setError(err.response.data.error);
       } else {
