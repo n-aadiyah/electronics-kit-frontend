@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import { API_BASE_URL } from '../config'; // ✅ imported
+import { API_BASE_URL } from '../config';
 
 const Register = () => {
   const [username, setUsername] = useState('');
@@ -9,27 +9,33 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirm, setConfirm]   = useState('');
   const [error, setError]       = useState('');
+  const [loading, setLoading]   = useState(false); // ✅ loading state
+
   const navigate = useNavigate();
 
   const handleRegister = async (e) => {
     e.preventDefault();
-    console.log("🔥 handleRegister called"); // ✅ Debug log
+    setError('');
+    setLoading(true); // ✅ before API call
 
     if (!username || !email || !password || !confirm) {
       setError('❌ Please fill in all fields.');
+      setLoading(false);
       return;
     }
 
     if (password !== confirm) {
       setError('❌ Passwords do not match.');
+      setLoading(false);
       return;
     }
 
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/auth/register`,
-        { username, email, password }
-      );
+      await axios.post(`${API_BASE_URL}/api/auth/register`, {
+        username,
+        email,
+        password,
+      });
 
       alert('✅ Registered successfully!');
       navigate('/login');
@@ -40,6 +46,8 @@ const Register = () => {
       } else {
         setError('❌ Registration failed. Try again.');
       }
+    } finally {
+      setLoading(false); // ✅ after success/fail
     }
   };
 
@@ -76,9 +84,9 @@ const Register = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="Enter your name"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
@@ -88,9 +96,9 @@ const Register = () => {
             <input
               type="email"
               className="form-control"
-              placeholder="Enter your email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
@@ -100,9 +108,9 @@ const Register = () => {
             <input
               type="password"
               className="form-control"
-              placeholder="Enter password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
@@ -112,15 +120,19 @@ const Register = () => {
             <input
               type="password"
               className="form-control"
-              placeholder="Confirm password"
               value={confirm}
               onChange={(e) => setConfirm(e.target.value)}
+              disabled={loading}
               required
             />
           </div>
 
-          <button type="submit" className="btn btn-success w-100">
-            Register
+          <button
+            type="submit"
+            className="btn btn-success w-100"
+            disabled={loading} // ✅ disable while loading
+          >
+            {loading ? 'Registering...' : 'Register'}
           </button>
         </form>
 
