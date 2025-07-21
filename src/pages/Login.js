@@ -7,6 +7,7 @@ const Login = () => {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [error, setError]       = useState('');
+  const [loading, setLoading]   = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
@@ -18,15 +19,14 @@ const Login = () => {
     }
 
     try {
+      setLoading(true); // 🚀 Start loading
       const res = await axios.post(
-        `${API_BASE_URL}/api/auth/login`, // ✅ Use deployed backend
+        `${API_BASE_URL}/api/auth/login`,
         { email, password },
-        { withCredentials: true }         // ✅ Optional: needed if backend sends cookies
+        { withCredentials: true }
       );
 
-      // ✅ Save token in localStorage
       localStorage.setItem("token", res.data.token);
-
       alert('✅ Login successful!');
       navigate('/home');
     } catch (err) {
@@ -36,6 +36,8 @@ const Login = () => {
       } else {
         setError('❌ Login failed. Please try again.');
       }
+    } finally {
+      setLoading(false); // ✅ Stop loading
     }
   };
 
@@ -77,6 +79,7 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
@@ -89,11 +92,16 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              disabled={loading}
             />
           </div>
 
-          <button type="submit" className="btn btn-primary w-100">
-            Login
+          <button
+            type="submit"
+            className="btn btn-primary w-100"
+            disabled={loading}
+          >
+            {loading ? 'Logging in...' : 'Login'}
           </button>
         </form>
 
