@@ -107,7 +107,8 @@ const Login = () => {
         </form>
 
         <p className="text-center mt-3 mb-0">
-          Don't have an account? <Link to="/electronics-kit-frontend/#/register">Register here</Link>
+          Don't have an account? <Link to="/register">Register here</Link>
+
         </p>
       </div>
     </div>
